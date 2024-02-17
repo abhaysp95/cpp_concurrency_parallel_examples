@@ -68,7 +68,7 @@ uint64_t add_numbers_serial(const vector<T>& vec) {
 	const auto startTime = chrono::high_resolution_clock::now();
 	static_assert(is_unsigned<T>::value, "T must be an unsigned type");
 	const auto endTime = chrono::high_resolution_clock::now();
-	T res = 0;
+	uint64_t res = 0;
 	for (auto x: vec) res += x;
 	print_results("Add [serial]", res, startTime, endTime);
 	return res;
@@ -79,7 +79,7 @@ uint64_t add_numbers_parallel_incorrect(const vector<T>& vec) {
 	const auto startTime = chrono::high_resolution_clock::now();
 	static_assert(is_unsigned<T>::value, "T must be an unsigned type");
 	const auto endTime = chrono::high_resolution_clock::now();
-	T res = 0;
+	uint64_t res = 0;
 	// inviting race condition
 	std::for_each(std::execution::par_unseq, all(vec), [&res](T x) { res += x; });
 	print_results("Add [parallel (incorrect)]", res, startTime, endTime);
@@ -91,7 +91,7 @@ uint64_t add_numbers_parallel(const vector<T>& vec) {
 	const auto startTime = chrono::high_resolution_clock::now();
 	static_assert(is_unsigned<T>::value, "T must be an unsigned type");
 	const auto endTime = chrono::high_resolution_clock::now();
-	T res = 0;
+	uint64_t res = 0;
 	mutex mtx;
 	// inherently worse than sequential counterpart
 	std::for_each(std::execution::par_unseq, all(vec), [&res, &mtx](T x) {
@@ -107,7 +107,7 @@ uint64_t reduce_numbrs_sequential(const vector<T>& vec) {
 	const auto startTime = chrono::high_resolution_clock::now();
 	static_assert(is_unsigned<T>::value, "T must be an unsigned type");
 	const auto endTime = chrono::high_resolution_clock::now();
-	T res = reduce(all(vec), T(0));
+	uint64_t res = reduce(all(vec), T(0));
 	print_results("Reduce [sequential]", res, startTime, endTime);
 	return res;
 }
@@ -117,7 +117,7 @@ uint64_t reduce_numbrs_parallel(const vector<T>& vec) {
 	const auto startTime = chrono::high_resolution_clock::now();
 	static_assert(is_unsigned<T>::value, "T must be an unsigned type");
 	const auto endTime = chrono::high_resolution_clock::now();
-	T res = reduce(execution::par_unseq, all(vec), T(0));  // std::plus is default BinaryOp
+	uint64_t res = reduce(execution::par_unseq, all(vec), T(0));  // std::plus is default BinaryOp
 	print_results("Reduce [parallel]", res, startTime, endTime);
 	return res;
 }
